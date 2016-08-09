@@ -1,0 +1,25 @@
+{
+  "name": "weighin-cli",
+  "version": "0.0.1",
+  "description": "Report your project's build weight to WeighIn",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/**/*.js"
+  },
+  "bin": {
+    "weighin": "index.js"
+  },
+  "keywords": [
+    "weight",
+    "cli"
+  ],
+  "author": "Jordan Eldredge <jordan@jordaneldredge.com>",
+  "license": "MIT",
+  "dependencies": {
+    "gzip-size": "^3.0.0",
+    "node-fetch": "^1.5.3"
+  },
+  "devDependencies": {
+    "tape": "^4.6.0"
+  }
+}
