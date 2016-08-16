@@ -6,7 +6,7 @@ function resourceUrl(owner, repo, branch) {
     return [
         ENDPOINT,
         'api',
-        'v',
+        'v0',
         owner,
         repo,
         branch
@@ -37,12 +37,11 @@ function report(weight) {
 
     request.post({
         url: resourceUrl(owner, repo, branch),
-        form: {
-            json: body
-        }
+        method: "POST",
+        json: body
     }, function(err, response, result) {
         if (response.statusCode === 200) {
-            console.log('SUCCESS');
+            console.log('SUCCESS! Reported:', body);
         } else {
             console.log('Whoops! Got ' + response.statusCode + ':', response.body);
         }
