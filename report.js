@@ -1,6 +1,17 @@
-var fetch = require('node-fetch');
+var request = require('request');
 
-var ENDPOINT = 'http://localhost:3000';
+var ENDPOINT = 'http://weighin.jordaneldredge.com';
+
+function resourceUrl(owner, repo, branch) {
+    return [
+        ENDPOINT,
+        'api',
+        'v',
+        owner,
+        repo,
+        branch
+    ].join('/');
+}
 
 function report(weight) {
     if (!process.env.TRAVIS) {
@@ -15,24 +26,27 @@ function report(weight) {
         throw "Whoops, we need a repo";
     }
 
-    var body = JSON.stringify({
-        repoSlug: process.env.TRAVIS_REPO_SLUG,
-        branch: process.env.TRAVIS_BRANCH,
+    var body = {
         weight: weight
-    });
-
-    var request = {
-        method: 'POST',
-        body: body
     };
 
-    fetch(ENDPOINT, request).then(function(res) {
-        console.log(res.json());
-    }).catch(function(err) {
-        console.log(err);
+    var ownerRepo = process.env.TRAVIS_REPO_SLUG.split('/');
+    var owner = ownerRepo[0];
+    var repo = ownerRepo[1];
+    var branch = process.env.TRAVIS_BRANCH;
+
+    request.post({
+        url: resourceUrl(owner, repo, branch),
+        form: {
+            json: body
+        }
+    }, function(err, response, result) {
+        if (response.statusCode === 200) {
+            console.log('SUCCESS');
+        } else {
+            console.log('Whoops! Got ' + response.statusCode + ':', response.body);
+        }
     });
 }
 
 module.exports = report;
-
-
