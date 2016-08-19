@@ -44,13 +44,17 @@ function report(weight) {
         weight: weight
     };
 
+    var url = resourceUrl(owner, repo, pull);
+
+    console.log(process.env);
+
     request.post({
-        url: resourceUrl(owner, repo, pull),
+        url: url,
         method: "POST",
         json: body
     }, function(err, response, result) {
         if (response.statusCode === 200) {
-            console.log('SUCCESS! Reported:', body);
+            console.log('SUCCESS! Reported:', body, 'to', url);
         } else {
             console.log('Whoops! Got ' + response.statusCode + ':', response.body);
         }
