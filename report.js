@@ -2,6 +2,19 @@ var request = require('request');
 
 var ENDPOINT = 'http://weighin.jordaneldredge.com';
 
+function getEnv(key) {
+    var value = process.env[key];
+    switch(value) {
+        case 'true':
+            return true;
+        case 'false':
+            return false;
+        default:
+            return value;
+    }
+}
+
+
 function resourceUrl(owner, repo, pull) {
     var base = [
         ENDPOINT,
@@ -22,20 +35,20 @@ function resourceUrl(owner, repo, pull) {
 }
 
 function report(weight) {
-    if (!process.env.TRAVIS) {
+    if (!getEnv('TRAVIS')) {
         throw "Whoops, we only run in Travis right now";
     }
 
-    if (!process.env.TRAVIS_REPO_SLUG) {
+    if (!getEnv('TRAVIS_REPO_SLUG')) {
         throw "Whoops, we need a repo";
     }
 
-    var ownerRepo = process.env.TRAVIS_REPO_SLUG.split('/');
+    var ownerRepo = getEnv('TRAVIS_REPO_SLUG').split('/');
     var owner = ownerRepo[0];
     var repo = ownerRepo[1];
-    var pull = process.env.TRAVIS_PULL_REQUEST;
+    var pull = getEnv('TRAVIS_PULL_REQUEST');
 
-    if (!pull && process.env.TRAVIS_BRANCH ==! 'master') {
+    if (pull && getEnv('TRAVIS_BRANCH') ==! 'master') {
         console.log('We are not testing master or a pull request. Exiting.');
         return;
     }
