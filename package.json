@@ -1,6 +1,6 @@
 {
   "name": "weighin-cli",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Report your project's build weight to WeighIn",
   "main": "index.js",
   "scripts": {
